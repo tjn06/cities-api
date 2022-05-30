@@ -1,0 +1,104 @@
+</html><!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <title>Get city population</title>
+    <meta content="initial-scale=1, width=device-width" name="viewport" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="app">
+
+      <header>
+        <nav class="center-content">
+          <div class="header-content">
+            <span id="header-text">select request-method </span>
+            <div>
+              <input type="radio" value="get" v-model="selectedMethod" id="GET" />
+              <label for="GET">GET</label>
+              <input type="radio" value="post" v-model="selectedMethod" id="POST" />
+              <label for="POST">POST</label>
+              <input type="radio" value="put" v-model="selectedMethod" id="PUT" />
+              <label for="PUT">PUT</label>
+              <input type="radio" value="delete" v-model="selectedMethod" id="DELETE"/>
+              <label for="DELETE">DELETE</label>
+            </div>
+          </div>
+          <div class="header-footer">
+            <a href="#footer" id="header">&#10597</a>
+          </div>
+        </nav>
+      </header>
+
+      <div class="center-content">
+        <fieldset>
+          <legend>{{btnTextHandler}}</legend>
+          <div class="wrap-container">
+            <input
+              type="text"
+              v-model="cityNameInput"
+              placeholder="City"
+              :disabled="!cityInputValidation"
+            />
+            <input
+              type="text"
+              v-model="populationInput"
+              placeholder="Population"
+              :disabled="!populationInputValidation"
+            />
+            <input
+              type="text"
+              v-model="cityId"
+              placeholder="City-ID"
+              :disabled="!idInputValidation"
+            />
+            <input
+              @click="executeRequestMethod()"
+              :disabled="!requestBtnValidation"
+              type="button"
+              :value="btnTextHandler"
+            />
+          </div>
+        </fieldset>
+
+        <div v-if="loading === true" id="spinner"></div>
+
+        <fieldset v-if="citiesData !== null">
+          <legend>result: <span class="request-status" :class="gotError ? 'fail' : 'success'">{{requestStatus}} {{gotError ? '&#215' : '&#10003'}} </span>
+          </legend>
+            <template v-for="city in citiesData" :key="city.id">
+              <article class="row-section">
+                <div>
+                  <h2>{{ city.name }}</h2>
+                  <span>ID: {{ city.id }}</span>
+                </div>
+                <div class="end-row">
+                  <span> population: </span>
+                  <span id="white"> {{ city.population }} </span>
+                  <div>
+                    <input
+                      v-if="deleteBtnValidation"
+                      type="button"
+                      value="X"
+                      @click="deleteCity(city.id)"
+                    />
+                    <input
+                      v-if="idInputValidation"
+                      type="button"
+                      value="select ID"
+                      @click="addIdToInputField(city.id)"
+                    />
+                  </div>
+                </div>
+              </article>
+            </template>
+        </fieldset>
+      </div>
+
+      <footer class="header-footer "><a href="#header" id="footer">	&#10595</a></footer>
+
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
